@@ -14,17 +14,13 @@ class _numbers(ModuleType):
         self.__module__ = self.__name
         super().__init__(self.__name)
 
-    def __call__(self):
-        print("one")
-        pass
-
     # Convert number to string
     @staticmethod
     def num_to_str(num):
         num_groups = ['thousand', 'million', 'billion', 'trillion', 'quadrillion', 'quintillion', 'sextillion', 'septillion', 'octillion', 'nonillion', 'decillion', 'undecillion']
         single_num_names = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
         teens_names = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen']
-        tens_num_names = ['', 'ten', 'twenty', 'thirty', 'fourty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety']
+        tens_num_names = ['', 'ten', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety']
         name = ""
         next_groups = abs(num)
         i = -1
@@ -51,7 +47,7 @@ class _numbers(ModuleType):
                 curr_group_name += single_num_names[curr_group % 10]
                 curr_group_name += ' '
 
-            curr_group_name += group_name
+            curr_group_name += group_name if curr_group != 0 else ''
             name = curr_group_name + name
 
             if next_groups == 0:
