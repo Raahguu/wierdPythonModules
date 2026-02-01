@@ -1,12 +1,15 @@
 import sys
 from types import ModuleType
 
+
 class _numbers(ModuleType):
     # Create the instance, with the value
     def __init__(self, value):
         if isinstance(value, float):
             if not value.is_integer():
-                raise ValueError(f"The Module's value must be of type 'int', not 'float'")
+                raise ValueError(
+                    "The Module's value must be of type 'int', not 'float'"
+                )
             value = int(value)
 
         self.__value = value
@@ -17,48 +20,98 @@ class _numbers(ModuleType):
     # Convert number to string
     @staticmethod
     def num_to_str(num):
-        num_groups = ['thousand', 'million', 'billion', 'trillion', 'quadrillion', 'quintillion', 'sextillion', 'septillion', 'octillion', 'nonillion', 'decillion', 'undecillion']
-        single_num_names = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
-        teens_names = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen']
-        tens_num_names = ['', 'ten', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety']
+        num_groups = [
+            "thousand",
+            "million",
+            "billion",
+            "trillion",
+            "quadrillion",
+            "quintillion",
+            "sextillion",
+            "septillion",
+            "octillion",
+            "nonillion",
+            "decillion",
+            "undecillion",
+        ]
+        single_num_names = [
+            "",
+            "one",
+            "two",
+            "three",
+            "four",
+            "five",
+            "six",
+            "seven",
+            "eight",
+            "nine",
+        ]
+        teens_names = [
+            "ten",
+            "eleven",
+            "twelve",
+            "thirteen",
+            "fourteen",
+            "fifteen",
+            "sixteen",
+            "seventeen",
+            "eighteen",
+            "nineteen",
+        ]
+        tens_num_names = [
+            "",
+            "ten",
+            "twenty",
+            "thirty",
+            "forty",
+            "fifty",
+            "sixty",
+            "seventy",
+            "eighty",
+            "ninety",
+        ]
         name = ""
         next_groups = abs(num)
         i = -1
         while True:
-            if (i >= len(num_groups)):
+            if i >= len(num_groups):
                 raise ValueError("Number too large")
 
             curr_group = next_groups % 1000
             next_groups = next_groups // 1000
 
             group_name = num_groups[i] if i >= 0 else ""
-            group_name += ' '
+            group_name += " "
 
-            curr_group_name = ''
+            curr_group_name = ""
             # Hundreds
-            curr_group_name += single_num_names[curr_group // 100] + ' hundred ' if curr_group // 100 > 0 else ''
+            curr_group_name += (
+                single_num_names[curr_group // 100] + " hundred "
+                if curr_group // 100 > 0
+                else ""
+            )
 
             if ((curr_group % 100) // 10) == 1:
                 curr_group_name += teens_names[curr_group % 10]
-                curr_group_name += ' '
+                curr_group_name += " "
             else:
                 curr_group_name += tens_num_names[(curr_group % 100) // 10]
-                curr_group_name += ' '
+                curr_group_name += " "
                 curr_group_name += single_num_names[curr_group % 10]
-                curr_group_name += ' '
+                curr_group_name += " "
 
-            curr_group_name += group_name if curr_group != 0 else ''
+            curr_group_name += group_name if curr_group != 0 else ""
             name = curr_group_name + name
 
             if next_groups == 0:
                 break
             i += 1
 
-        if name.strip() == '':
-            name = 'zero'
+        if name.strip() == "":
+            name = "zero"
 
         if num < 0:
-            name = 'negative ' + name
+            name = "negative " + name
 
         return " ".join(name.strip().split())
 
@@ -76,7 +129,7 @@ class _numbers(ModuleType):
         return self.__name
 
     def __bytes__(self):
-        return bytes(str(self), 'utf-8')
+        return bytes(str(self), "utf-8")
 
     def __complex__(self):
         return complex(float(self))
@@ -94,7 +147,7 @@ class _numbers(ModuleType):
         if isinstance(other, int):
             return _numbers(other + self.__value)
         elif isinstance(other, _numbers):
-            return _numbers(other.__value + self.__value )
+            return _numbers(other.__value + self.__value)
         else:
             raise TypeError(f"Can't add type '{type(other)}' and type 'module'")
 
@@ -110,7 +163,7 @@ class _numbers(ModuleType):
         if isinstance(other, int):
             return _numbers(other - self.__value)
         elif isinstance(other, _numbers):
-            return _numbers(other.__value - self.__value )
+            return _numbers(other.__value - self.__value)
         else:
             raise TypeError(f"Can't subtract type '{type(other)}' and type 'module'")
 
@@ -126,7 +179,7 @@ class _numbers(ModuleType):
         if isinstance(other, int):
             return _numbers(other * self.__value)
         elif isinstance(other, _numbers):
-            return _numbers(other.__value * self.__value )
+            return _numbers(other.__value * self.__value)
         else:
             raise TypeError(f"Can't multiply type '{type(other)}' and type 'module'")
 
@@ -152,7 +205,9 @@ class _numbers(ModuleType):
         elif isinstance(other, _numbers):
             return _numbers(self.__value / other.__value)
         else:
-            raise TypeError(f"Can't floor divide type 'module' and type '{type(other)}'")
+            raise TypeError(
+                f"Can't floor divide type 'module' and type '{type(other)}'"
+            )
 
     def __rdiv__(self, other):
         if isinstance(other, int):
@@ -160,7 +215,9 @@ class _numbers(ModuleType):
         elif isinstance(other, _numbers):
             return _numbers(other.__value / self.__value)
         else:
-            raise TypeError(f"Can't floor divide type '{type(other)}' and type 'module'")
+            raise TypeError(
+                f"Can't floor divide type '{type(other)}' and type 'module'"
+            )
 
     def __floordiv__(self, other):
         if isinstance(other, int):
@@ -168,7 +225,9 @@ class _numbers(ModuleType):
         elif isinstance(other, _numbers):
             return _numbers(self.__value // other.__value)
         else:
-            raise TypeError(f"Can't floor divide type 'module' and type '{type(other)}'")
+            raise TypeError(
+                f"Can't floor divide type 'module' and type '{type(other)}'"
+            )
 
     def __rfloordiv__(self, other):
         if isinstance(other, int):
@@ -176,24 +235,29 @@ class _numbers(ModuleType):
         elif isinstance(other, _numbers):
             return _numbers(other.__value // self.__value)
         else:
-            raise TypeError(f"Can't floor divide type '{type(other)}' and type 'module'")
+            raise TypeError(
+                f"Can't floor divide type '{type(other)}' and type 'module'"
+            )
 
     def __pow__(self, other):
         if isinstance(other, int):
-            return _numbers(self.__value ** other)
+            return _numbers(self.__value**other)
         elif isinstance(other, _numbers):
-            return _numbers(self.__value ** other.__value)
+            return _numbers(self.__value**other.__value)
         else:
-            raise TypeError(f"Can't exponentiate type 'module' and type '{type(other)}'")
+            raise TypeError(
+                f"Can't exponentiate type 'module' and type '{type(other)}'"
+            )
 
     def __rpow__(self, other):
         if isinstance(other, int):
-            return _numbers(other ** self.__value)
+            return _numbers(other**self.__value)
         elif isinstance(other, _numbers):
-            return _numbers(other.__value ** self.__value)
+            return _numbers(other.__value**self.__value)
         else:
-            raise TypeError(f"Can't exponentiate type '{type(other)}' and type 'module'")
-
+            raise TypeError(
+                f"Can't exponentiate type '{type(other)}' and type 'module'"
+            )
 
     # Module Unary Arithmetic
     def __neg__(self):
@@ -204,7 +268,6 @@ class _numbers(ModuleType):
 
     def __abs__(self):
         return _numbers(abs(self.__value))
-
 
     # Module Bitwise Arithmetic
     def __and__(self, other):
@@ -286,7 +349,6 @@ class _numbers(ModuleType):
             return _numbers(other.__value << self.__value)
         else:
             raise TypeError(f"Can't OR type '{type(other)}' and type 'module'")
-
 
     # Module Equalities
     def __eq__(self, other):
